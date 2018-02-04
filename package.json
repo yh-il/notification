@@ -1,0 +1,22 @@
+{
+  "name": "notification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "nightmare": "^2.10.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yh-il/notification.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yh-il/notification/issues"
+  },
+  "homepage": "https://github.com/yh-il/notification#readme"
+}
