@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/yh-il/notification/issues"
   },
-  "homepage": "https://github.com/yh-il/notification#readme"
+  "homepage": "https://github.com/yh-il/notification#readme",
+  "devDependencies": {
+    "axios": "^0.17.1",
+    "querystring": "^0.2.0"
+  }
 }
