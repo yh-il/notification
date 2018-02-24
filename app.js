@@ -1,44 +1,65 @@
+/**
+ * LINE
+ */
+// const Line = require('./line');
+// const MyLine = new Line();
+// const TOKEN = '****';
+
+// LINE Notify トークンセット
+// MyLine.setToken(TOKEN);
+// メッセージ送信
+// MyLine.notify('送信したいメッセージ');
+
+// =====================================================
 
 /**
  * setting Nightmare
  */
-// let Nightmare = require('nightmare');
-// const nightmare = Nightmare({ show: true });
+let Nightmare = require('nightmare');
+const nightmare = Nightmare({ show: true });
 
-// const user = '*****';
-// const pass = '*****';
+const user = '***';
+const pass = '***';
 
+nightmare
 
-// nightmare
-// .goto('https://www.google.co.jp/')
-// .type('#input__user', user);
-// .type('#input__pass', pass);
-// .click('#login_submit')
-// .type('#lst-ib', 'github nightmare')
-// .click('input[name="btnK"]')
-// .evaluate(function() {
-//     return document.querySelector("h3[class='r'] a").href;
-// })
-// .then(function(result) {
-//     console.log(result);
-// })
+// ログインまでの処理
+.goto('https://www.jumpone.jp/jumpone_reserve/mypage.php')
+.type('input[name="login_id"]', user)
+.type('input[name="login_pass"]', pass)
+.click('input[src="img/top_login_off.gif"]')
+.wait(1000)
+.click('a[href="reserve.php"]')
+
+/**
+ * 店舗選択
+ * 第二引数にoptionのvalue値を設定する
+ */
+.select('select[name="tenpo"]', 2) //銀座
+
+/**
+ * 判定の処理
+ * day__b列の a > div .utit(アクティブ) か .unit_past(非アクティブ)
+ * :nth-of-type(8) 上から8番目のレッスンを指定した場合
+ */
+.evaluate(function() {
+    return document.querySelector('#day_ a[href="javascript:void(0)"]:nth-of-type(10) div.unit');
+})
+.then(function(result) {
+    if (result !== null) {
+        console.log("あいてる");
+        // トランポリン番号の取得
+        let tranpo = document.querySelector('');
+    } else {
+        console.log("あいてない");
+    }
+})
 
 // .end()
 // .then(console.log)
-// .catch((error) => {
-//     console.error('error message:', error);
-// });
+.catch((error) => {
+    console.error('error message:', error);
+});
 
 //=====================================================
 
-/**
- * LINE
- */
-const Line = require('./line');
-const MyLine = new Line();
-const TOKEN = '****************:';
-
-// LINE Notify トークンセット
-MyLine.setToken(TOKEN);
-// メッセージ送信
-MyLine.notify('送信したいメッセージ');
