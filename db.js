@@ -1,31 +1,38 @@
 var MongoClient = require("mongodb").MongoClient;
- 
-// 接続文字列
-var url = "mongodb://localhost:27017";
-const dbName = 'sample';
- 
-MongoClient.connect(url, function(err, client) {
-    console.log("Connected successfully to server");
-  
-    const db = client.db(dbName);
 
-    let obj = {
-        "freeTrampolines": 2
-    };
+const Db = function () {};
 
-    // findDocuments(db, function () {
-    //     client.close();
-    // });
+Db.prototype.dbConect = function () {
 
-    // removeDocument(db, function () {
-    //     client.close();
-    // });
+    var url = "mongodb://localhost:27017";
+    const dbName = 'sample';
 
-    // insertDocuments(db, obj, function () {
-    //     client.close();
-    // });
-});
+    MongoClient.connect(url, function (err, client) {
+        // 接続文字列
+        console.log("Connected successfully to server");
 
+        const db = client.db(dbName);
+
+        let obj = {
+            "freeTrampolines": 2
+        };
+
+        findDocuments(db, function (docs) {
+            console.log(docs[0]["freeTrampolines"]);
+            client.close();
+        });
+
+        // removeDocument(db, function () {
+        //     client.close();
+        // });
+
+        // insertDocuments(db, obj, function () {
+        //     client.close();
+        // });
+    });
+}
+
+module.exports = Db;
 
 // =====================================================
 
@@ -53,7 +60,7 @@ const findDocuments = function(db, callback) {
     const collection = db.collection('sample');
     collection.find({}).toArray(function(err, docs) {
         console.log("Found the following records");
-        console.log(docs[0]["freeTrampolines"])
+        // console.log(docs[0]["freeTrampolines"])
         callback(docs);
     });
 }

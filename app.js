@@ -15,11 +15,15 @@
 /**
  * setting Nightmare
  */
-let Nightmare = require('nightmare');
+const Nightmare = require('nightmare');
 const nightmare = Nightmare({ show: true });
 
 const user = '***';
 const pass = '***';
+
+const fs = require('fs');
+const DATA_URL = './data.json';
+let data = require(DATA_URL);
 
 nightmare
 
@@ -35,11 +39,11 @@ nightmare
  * 店舗選択
  * 第二引数にoptionのvalue値を設定する
  */
-.select('select[name="tenpo"]', 2) //銀座
+.select('select[name="tenpo"]', data["tenpo"]) //銀座
 .wait(1000)
 
 // レッスン選択
-.click('#day__b a[href="javascript:void(0)"]:nth-of-type(12) div.unit')
+.click(data["day"] + ' a[href="javascript:void(0)"]:nth-of-type(' + data["lesson"] + ') div.unit')
 
 // set -> 非アクティブ
 // thickbox -> アクティブ
@@ -49,20 +53,23 @@ nightmare
     return Nodelist.length;
 })
 .then(function(result) {
-    let before = 0; 　// DBから取ってくる
+    let before = data["before"];
     let now = result;
     if (before < now) {
         // 空きが出た
+        console.log('空きが出た');
         // 通知を飛ばす
     } else if (before === now) {
         // 変わらない
+        console.log('変わらない');
     } else if (before > now) {
         // 空きが減った
+        console.log('空きが減った');
     }
-    // DBの数値を更新
-    // db = now;
+    // 空きトランポリン数を更新
+    data["before"] = now;
+    fs.writeFile(DATA_URL, JSON.stringify(data, null, '    '));
 })
-
 
 
 /**
@@ -85,9 +92,17 @@ nightmare
 
 // .end()
 // .then(console.log)
-.catch((error) => {
-    console.error('error message:', error);
-});
+// .catch((error) => {
+//     console.error('error message:', error);
+// });
 
 //=====================================================
 
+/**
+ * DB接続の場合
+ */
+// const Db = require('./db');
+// const MyDb = new Db();
+// MyDb.dbConect();
+
+//=====================================================
