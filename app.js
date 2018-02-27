@@ -1,14 +1,14 @@
 /**
  * LINE
  */
-// const Line = require('./line');
-// const MyLine = new Line();
-// const TOKEN = '****';
+const Line = require('./Line');
+const MyLine = new Line();
+const TOKEN = '**';
 
 // LINE Notify トークンセット
-// MyLine.setToken(TOKEN);
+MyLine.setToken(TOKEN);
 // メッセージ送信
-// MyLine.notify('送信したいメッセージ');
+MyLine.notify('インターバルテスト');
 
 // =====================================================
 
@@ -16,13 +16,15 @@
  * setting Nightmare
  */
 const Nightmare = require('nightmare');
-const nightmare = Nightmare({ show: true });
+const nightmare = Nightmare({ show: false });
 
-const user = '***';
-const pass = '***';
+const user = '**';
+const pass = '**';
 
 const fs = require('fs');
-const DATA_URL = './data.json';
+// const DATA_URL = './data.json';
+// フルパスじゃないと定期実行できない
+const DATA_URL = '**';
 let data = require(DATA_URL);
 
 nightmare
@@ -52,19 +54,23 @@ nightmare
     let Nodelist = document.querySelectorAll('div.seat_map div.number a.thickbox');
     return Nodelist.length;
 })
+.end()
 .then(function(result) {
     let before = data["before"];
     let now = result;
     if (before < now) {
         // 空きが出た
         console.log('空きが出た');
+        // MyLine.notify('空きが出た');
         // 通知を飛ばす
     } else if (before === now) {
         // 変わらない
         console.log('変わらない');
+        // MyLine.notify('変わらない');
     } else if (before > now) {
         // 空きが減った
         console.log('空きが減った');
+        // MyLine.notify('空きが減った');
     }
     // 空きトランポリン数を更新
     data["before"] = now;
@@ -90,7 +96,6 @@ nightmare
 //     }
 // })
 
-// .end()
 // .then(console.log)
 // .catch((error) => {
 //     console.error('error message:', error);
