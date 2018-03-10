@@ -8,7 +8,7 @@ const TOKEN = '**';
 // LINE Notify トークンセット
 MyLine.setToken(TOKEN);
 // メッセージ送信
-MyLine.notify('インターバルテスト');
+// MyLine.notify('インターバルテスト');
 
 // =====================================================
 
@@ -16,7 +16,7 @@ MyLine.notify('インターバルテスト');
  * setting Nightmare
  */
 const Nightmare = require('nightmare');
-const nightmare = Nightmare({ show: false });
+const nightmare = Nightmare({ show: true });
 
 const user = '**';
 const pass = '**';
@@ -26,6 +26,8 @@ const fs = require('fs');
 // フルパスじゃないと定期実行できない
 const DATA_URL = '**';
 let data = require(DATA_URL);
+let LESSON_DAY = Number(data["day"]) + 1;
+let LESSON_NUM = data["lesson"];
 
 nightmare
 
@@ -44,8 +46,19 @@ nightmare
 .select('select[name="tenpo"]', data["tenpo"]) //銀座
 .wait(1000)
 
+// =====================================================
+// querySelectorのテスト
+// .evaluate(function() {
+//     return document.querySelectorAll('#day_')[1].querySelector('#title_week').textContent.trim();
+// })
+// .then(function(result) {
+//     console.log(result);
+// })
+// =====================================================
+
+
 // レッスン選択
-.click(data["day"] + ' a[href="javascript:void(0)"]:nth-of-type(' + data["lesson"] + ') div.unit')
+.click('#schedule div:nth-of-type(' + LESSON_DAY + ') a[href="javascript:void(0)"]:nth-of-type(' + LESSON_NUM + ') div.unit')
 
 // set -> 非アクティブ
 // thickbox -> アクティブ
@@ -54,52 +67,29 @@ nightmare
     let Nodelist = document.querySelectorAll('div.seat_map div.number a.thickbox');
     return Nodelist.length;
 })
-.end()
+// .end()
 .then(function(result) {
     let before = data["before"];
     let now = result;
     if (before < now) {
         // 空きが出た
-        console.log('空きが出た');
-        // MyLine.notify('空きが出た');
+        // console.log('空きが出た');
+        myline.notify('空きが出た');
         // 通知を飛ばす
     } else if (before === now) {
         // 変わらない
         console.log('変わらない');
-        // MyLine.notify('変わらない');
+        // myline.notify('変わらない');
     } else if (before > now) {
         // 空きが減った
         console.log('空きが減った');
-        // MyLine.notify('空きが減った');
+        // myline.notify('空きが減った');
     }
     // 空きトランポリン数を更新
     data["before"] = now;
-    fs.writeFile(DATA_URL, JSON.stringify(data, null, '    '));
+    fs.writefile(data_url, json.stringify(data, null, '    '));
 })
 
-
-/**
- * 判定の処理
- * day__b列の a > div .utit(アクティブ) か .unit_past(非アクティブ)
- * :nth-of-type(8) 上から8番目のレッスンを指定した場合
- */
-// .evaluate(function() {
-//     return document.querySelector('#day_ a[href="javascript:void(0)"]:nth-of-type(10) div.unit');
-// })
-// .then(function(result) {
-//     if (result !== null) {
-//         console.log("あいてる");
-//         // トランポリン番号の取得
-//         let tranpo = document.querySelector('');
-//     } else {
-//         console.log("あいてない");
-//     }
-// })
-
-// .then(console.log)
-// .catch((error) => {
-//     console.error('error message:', error);
-// });
 
 //=====================================================
 

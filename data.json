@@ -10,10 +10,10 @@
     ],
     "tenpo": 4,
     "day_comment": [
-        "今日 -> #day__b",
-        "明日 -> #day_"
+        "今日 -> 1",
+        "明日 -> 2"
     ],
-    "day": "#day_",
+    "day": 2,
     "lesson_comment": "上からの数（1スタート）",
-    "lesson": 2
+    "lesson": 1
 }
