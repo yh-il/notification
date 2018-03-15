@@ -3,7 +3,7 @@
  */
 const Line = require('./Line');
 const MyLine = new Line();
-const TOKEN = '';
+const TOKEN = '**';
 
 // LINE Notify トークンセット
 MyLine.setToken(TOKEN);
@@ -18,13 +18,13 @@ MyLine.setToken(TOKEN);
 const Nightmare = require('nightmare');
 const nightmare = Nightmare({ show: false });
 
-const user = '';
-const pass = '';
+const user = '**';
+const pass = '**';
 
 const fs = require('fs');
 // const DATA_URL = './data.json';
 // フルパスじゃないと定期実行できない
-const DATA_URL = '';
+const DATA_URL = '**s';
 let data = require(DATA_URL);
 let LESSON_DAY = Number(data["day"]) + 1;
 let LESSON_NUM = data["lesson"];
@@ -58,15 +58,18 @@ nightmare
 
 
 // レッスン選択
-.click('#schedule div:nth-of-type(' + LESSON_DAY + ') a[href="javascript:void(0)"]:nth-of-type(' + LESSON_NUM + ') div.unit')
+// .click('#schedule div:nth-of-type(' + LESSON_DAY + ') a[href="javascript:void(0)"]:nth-of-type(' + LESSON_NUM + ') div.unit')
+.click('#schedule div:nth-of-type(' + LESSON_DAY + ') a[href="javascript:void(0)"]:nth-of-type(' + LESSON_NUM + ') div:nth-of-type(' + 1 + ')')
 
 // set -> 非アクティブ
 // thickbox -> アクティブ
+// myset ->自分の予約しているトランポリン
 // thickboxの数を数える
 .evaluate(function() {
     let allTrampoline = document.querySelectorAll('div.seat_map div.number').length;
     let inactiveTrampoline = document.querySelectorAll('div.seat_map div.number a[href="javascript:void(0)"].set').length;
-    let activeTrampoline = allTrampoline - inactiveTrampoline;
+    let myTrampoline = document.querySelectorAll('div.seat_map div.number a[href="javascript:void(0)"].myset').length;
+    let activeTrampoline = allTrampoline - ( inactiveTrampoline + myTrampoline );
     return activeTrampoline;
 })
 .end()
